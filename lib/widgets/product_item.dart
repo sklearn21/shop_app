@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app/screens/product_detail_screen.dart';
+
+import '../screens/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
   final String id;
@@ -37,9 +38,11 @@ class ProductItem extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           trailing: IconButton(
-            icon: Icon(Icons.shopping_cart),
-            color: Theme.of(context).accentColor,
+            icon: Icon(
+              Icons.shopping_cart,
+            ),
             onPressed: () {},
+            color: Theme.of(context).accentColor,
           ),
         ),
       ),
