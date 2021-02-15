@@ -18,6 +18,17 @@ class ProductItem extends StatelessWidget {
       listen: false,
     );
 
+    final snackBar = SnackBar(
+      content: Text('Item Added to Cart!'),
+      duration: Duration(seconds: 2),
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: () {
+          cart.removeSingleItem(product.id);
+        },
+      ),
+    );
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -56,6 +67,8 @@ class ProductItem extends StatelessWidget {
             ),
             onPressed: () {
               cart.addItem(product.id, product.price, product.title);
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             color: Theme.of(context).accentColor,
           ),
