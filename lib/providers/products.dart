@@ -64,20 +64,20 @@ class Products with ChangeNotifier {
     }
   }
 
-  Future<void> addProduct(Product product) {
+  Future<void> addProduct(Product product) async {
     const url = baseUrl + 'products.json';
-    return http
-        .post(
-      url,
-      body: json.encode({
-        'title': product.title,
-        'description': product.description,
-        'imageUrl': product.imageUrl,
-        'price': product.price,
-        'isFavorite': product.isFavorite,
-      }),
-    )
-        .then((response) {
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
+      );
+
       final newProduct = Product(
         title: product.title,
         description: product.description,
@@ -85,15 +85,13 @@ class Products with ChangeNotifier {
         imageUrl: product.imageUrl,
         id: json.decode(response.body)['name'],
       );
+
       _items.add(newProduct);
-      // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
-    }).catchError(
-      (error) {
-        print(error);
-        throw error;
-      },
-    );
+    } catch (error) {
+      print(error);
+      throw error;
+    }
   }
 
   void deleteProduct(String id) {
