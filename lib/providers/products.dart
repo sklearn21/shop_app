@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shop_app/providers/http_requests.dart';
 
 import 'product.dart';
 
@@ -76,14 +80,27 @@ class Products with ChangeNotifier {
   }
 
   void addProduct(Product product) {
+    const url = baseUrl +
+        'products.json'; //baseUrl and creates sub-folder in firebase named 'products' and '.json' is format.
+    http.post(
+      url,
+      body: json.encode({
+        'title': product.title,
+        'description': product.description,
+        'imageUrl': product.imageUrl,
+        'price': product.price,
+        'isFavorite': product.isFavorite,
+      }),
+    );
     final newProduct = Product(
       title: product.title,
-      price: product.price,
       description: product.description,
+      price: product.price,
       imageUrl: product.imageUrl,
       id: DateTime.now().toString(),
     );
     _items.add(newProduct);
+    // _items.insert(0, newProduct); // at the start of the list
     notifyListeners();
   }
 
