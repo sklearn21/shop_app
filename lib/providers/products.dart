@@ -64,6 +64,16 @@ class Products with ChangeNotifier {
     }
   }
 
+  Future<void> fetchAndSetProduct() async {
+    const url = baseUrl + 'products.json';
+    try {
+      final response = await http.get(url);
+      print(json.decode(response.body));
+    } catch (error) {
+      throw error;
+    }
+  }
+
   Future<void> addProduct(Product product) async {
     const url = baseUrl + 'products.json';
     try {
