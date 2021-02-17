@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shop_app/providers/http_requests.dart';
 
+import '../providers/http_requests.dart';
 import 'product.dart';
 
 class Products with ChangeNotifier {
@@ -59,16 +59,6 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  // void showFavouritesOnly() {
-  //   _showFavoritesOnly = true;
-  //   notifyListeners();
-  // }
-  //
-  // void showAll() {
-  //   _showFavoritesOnly = false;
-  //   notifyListeners();
-  // }
-
   void updateProduct(String id, Product newProduct) {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
@@ -80,9 +70,9 @@ class Products with ChangeNotifier {
   }
 
   void addProduct(Product product) {
-    const url = baseUrl +
-        'products.json'; //baseUrl and creates sub-folder in firebase named 'products' and '.json' is format.
-    http.post(
+    const url = baseUrl + 'products.json';
+    http
+        .post(
       url,
       body: json.encode({
         'title': product.title,
@@ -91,17 +81,19 @@ class Products with ChangeNotifier {
         'price': product.price,
         'isFavorite': product.isFavorite,
       }),
-    );
-    final newProduct = Product(
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      imageUrl: product.imageUrl,
-      id: DateTime.now().toString(),
-    );
-    _items.add(newProduct);
-    // _items.insert(0, newProduct); // at the start of the list
-    notifyListeners();
+    )
+        .then((response) {
+      final newProduct = Product(
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        id: json.decode(response.body)['name'],
+      );
+      _items.add(newProduct);
+      // _items.insert(0, newProduct); // at the start of the list
+      notifyListeners();
+    });
   }
 
   void deleteProduct(String id) {
