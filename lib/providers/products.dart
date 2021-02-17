@@ -69,9 +69,9 @@ class Products with ChangeNotifier {
     }
   }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     const url = baseUrl + 'products.json';
-    http
+    return http
         .post(
       url,
       body: json.encode({
