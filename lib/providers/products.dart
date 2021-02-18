@@ -54,8 +54,22 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void updateProduct(String id, Product newProduct) {
+  Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    final url = baseUrl + 'products/$id.json';
+
+    http.patch(
+      url,
+      body: json.encode(
+        {
+          'title': newProduct.title,
+          'price': newProduct.price,
+          'description': newProduct.description,
+          'imageUrl': newProduct.imageUrl,
+        },
+      ),
+    );
+
     if (prodIndex >= 0) {
       _items[prodIndex] = newProduct;
       notifyListeners();
