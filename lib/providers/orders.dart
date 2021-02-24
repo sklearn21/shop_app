@@ -30,7 +30,6 @@ class Orders with ChangeNotifier {
   Future<void> fetchAndSetOrders() async {
     const url = baseUrl + 'orders.json';
     final response = await http.get(url);
-    print(jsonDecode(response.body));
     final List<OrderItem> loadedOrders = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
