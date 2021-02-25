@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
 import './providers/products.dart';
+import './screens/auth_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/order_screen.dart';
 import './screens/product_detail_screen.dart';
-import './screens/products_overview_screen.dart';
 import './screens/user_product_screen.dart';
 
 void main() => runApp(MyApp());
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.deepOrange,
           fontFamily: 'Lato',
         ),
-        home: ProductsOverviewScreen(),
+        home: AuthScreen(),
         //home: UserProductsScreen(),
         routes: {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
