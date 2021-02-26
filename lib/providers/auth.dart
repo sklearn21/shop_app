@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/http_exception.dart';
 import '../providers/http_requests.dart';
 
 class Auth with ChangeNotifier {
@@ -12,17 +13,24 @@ class Auth with ChangeNotifier {
 
   Future<void> _authenticate(
       String email, String password, String authUrl) async {
-    final response = await http.post(
-      authUrl,
-      body: json.encode(
-        {
-          'email': email,
-          'password': password,
-          'returnSecureToken': true,
-        },
-      ),
-    );
-    print(jsonDecode(response.body));
+    try {
+      final response = await http.post(
+        authUrl,
+        body: json.encode(
+          {
+            'email': email,
+            'password': password,
+            'returnSecureToken': true,
+          },
+        ),
+      );
+      final responseData = jsonDecode(response.body);
+      if (responseData['error'] != null) {
+        throw HttpException(responseData['error']['message']);
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 
   Future<void> signup(String email, String password) async {
