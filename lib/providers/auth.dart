@@ -10,7 +10,8 @@ class Auth with ChangeNotifier {
   DateTime _expiryDate;
   String _userId;
 
-  Future<void> signup(String email, String password) async {
+  Future<void> _authenticate(
+      String email, String password, String authUrl) async {
     final response = await http.post(
       authUrl,
       body: json.encode(
@@ -21,6 +22,14 @@ class Auth with ChangeNotifier {
         },
       ),
     );
-    print(json.decode(response.body));
+    print(jsonDecode(response.body));
+  }
+
+  Future<void> signup(String email, String password) async {
+    return _authenticate(email, password, authSignupUrl);
+  }
+
+  Future<void> login(String email, String password) async {
+    return _authenticate(email, password, authLoginUrl);
   }
 }
