@@ -26,7 +26,7 @@ class Products with ChangeNotifier {
 
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
-    final url = baseUrl + 'products/$id.json';
+    final url = baseUrl + 'products/$id.json' + '?auth=$authToken';
 
     http.patch(
       url,
@@ -75,7 +75,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    const url = baseUrl + 'orders.json';
+    final url = baseUrl + 'products.json' + '?auth=$authToken';
     try {
       final response = await http.post(
         url,
@@ -105,7 +105,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async {
-    final url = baseUrl + 'products/$id.json';
+    final url = baseUrl + 'products/$id.json' + '?auth=$authToken';
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
