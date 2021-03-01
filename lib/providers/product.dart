@@ -11,6 +11,7 @@ class Product with ChangeNotifier {
   final String description;
   final double price;
   final String imageUrl;
+
   bool isFavorite;
 
   Product({
@@ -27,16 +28,19 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavoriteStatus(String authToken) async {
+  Future<void> toggleFavoriteStatus(String authToken, String userId) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
-    final url = baseUrl + 'products/$id.json' + '?auth=$authToken';
+    final url =
+        baseUrl + 'userFavorites/$userId' + '/$id.json' + '?auth=$authToken';
     try {
-      final response = await http.patch(url,
-          body: json.encode({
-            'isFavorite': isFavorite,
-          }));
+      final response = await http.put(
+        url,
+        body: json.encode(
+          isFavorite,
+        ),
+      );
       if (response.statusCode >= 400) {
         _setFavValue(oldStatus);
       }
